@@ -1,13 +1,15 @@
 #!/bin/sh
 
 # This script should be run via curl:
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ovitor/arch-post-install/master/install.sh)"
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ovitor/arch-post-install/master/setup-system.sh)"
+
+set -e
 
 NEWUSER=vitor
 
 update_already_installed_packages() {
 	echo "updating packages already installed"
-	pacman -Suy --no-confirm 
+	pacman -Suy --no-confirm
 }
 
 setup_oficial_packages() {
@@ -90,7 +92,7 @@ setup_oficial_packages() {
 		youtube-dl \
 		zathura \
 		zathura-pdf-mupdf \
-		zsh \
+		zsh
 }
 
 setup_new_user() {
@@ -102,11 +104,12 @@ setup_new_user() {
 	gpasswd -a $NEWUSER docker video input wheel
 }
 
-main () {
+main() {
 	update_already_installed_packages
 	setup_oficial_packages
 	setup_new_user
 	echo "finish"
+  exit 0
 }
 
 main "$@"
