@@ -9,12 +9,12 @@ NEWUSER=vitor
 
 update_already_installed_packages() {
 	echo "updating packages already installed"
-	pacman -Suy --no-confirm
+	pacman -Suy --noconfirm
 }
 
 setup_oficial_packages() {
 	echo "installing a lot of packages from official repositories"
-	pacman -S --no-confirm \
+	pacman -S --noconfirm \
 		acpi \
 		acpid \
 		alacritty \
