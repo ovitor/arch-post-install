@@ -6,6 +6,7 @@
 set -e
 
 NEWUSER=vitor
+DOTFILES_URL=https://github.com/ovitor/dotfiles.git
 
 update_already_installed_packages() {
 	echo "updating packages already installed"
@@ -14,7 +15,7 @@ update_already_installed_packages() {
 
 setup_oficial_packages() {
 	echo "installing a lot of packages from official repositories"
-	pacman -S --noconfirm \
+	pacman -S --needed --noconfirm \
 		acpi \
 		acpid \
 		alacritty \
@@ -29,8 +30,6 @@ setup_oficial_packages() {
 		cups \
 		cups-pdf \
 		dhcpcd \
-		diction \
-		dockd \
 		docker \
 		docker-compose \
 		dunst \
@@ -102,11 +101,15 @@ setup_new_user() {
 	chown $NEWUSER:$NEWUSER /home/$NEWUSER/.zshrc
 	chmod	644 /home/$NEWUSER/.zshrc
 	gpasswd -a $NEWUSER docker video input wheel
+  su -c "/usr/bin/git clone --recursive ${DOTFILES_URL} $HOME/.dotfiles" - $NEWUSER
+  su -c "$HOME/.dotfiles/./install" -c $NEWUSER
 }
+
 
 main() {
 	update_already_installed_packages
 	setup_oficial_packages
+  # todo setup aur packages
 	setup_new_user
 	echo "finish"
   exit 0
