@@ -6,6 +6,7 @@
 set -e
 
 NEWUSER=vitor
+NEWPASSWORD=vitor
 DOTFILES_URL=https://github.com/ovitor/dotfiles.git
 
 update_already_installed_packages() {
@@ -64,7 +65,6 @@ setup_oficial_packages() {
 		rclone \
 		rofi \
 		rsync \
-		screen \
 		speedtest-cli \
 		sudo \
 		sxiv \
@@ -78,7 +78,6 @@ setup_oficial_packages() {
 		udiskie \
 		unrar \
 		unzip \
-		upower \
 		vim \
 		weechat \
 		wpa_supplicant \
@@ -97,10 +96,13 @@ setup_oficial_packages() {
 setup_new_user() {
 	echo "setup new user"
 	useradd -ms /bin/zsh $NEWUSER
-	cat "# will be replaced by dotfiles" > /home/$NEWUSER/.zshrc
+  echo $NEWPASSWORD | passwd $NEWUSER --stdin
+	gpasswd -a $NEWUSER docker video input wheel
+
+  # configuring other small things
+	echo "# will be replaced by dotfiles" > /home/$NEWUSER/.zshrc
 	chown $NEWUSER:$NEWUSER /home/$NEWUSER/.zshrc
 	chmod	644 /home/$NEWUSER/.zshrc
-	gpasswd -a $NEWUSER docker video input wheel
   su -c "/usr/bin/git clone --recursive ${DOTFILES_URL} $HOME/.dotfiles" - $NEWUSER
   su -c "$HOME/.dotfiles/./install" -c $NEWUSER
 }
